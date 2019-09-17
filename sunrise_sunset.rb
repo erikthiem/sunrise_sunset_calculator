@@ -17,7 +17,7 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising)
   if is_rising
     approximate_time = day_of_year(day, month, year) + ((6 - lngHour) / 24)
   else # implicitly is_setting thus we are calculating the setting time instead
-    approximate_time = day_of_year(day, month_year) + ((18 - lngHour) / 24)
+    approximate_time = day_of_year(day, month, year) + ((18 - lngHour) / 24)
   end
 
   #3. calculate the Sun's mean anomaly
@@ -60,6 +60,8 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising)
   if (cosH > 1) 
     # the sun never rises on this location (on the specified date)
     return nil
+  end
+
   if (cosH < -1)
     # the sun never sets on this location (on the specified date)
     return nil
@@ -77,7 +79,7 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising)
 
   #8. calculate local mean time of rising/setting
 
-  local_mean_time_of_rising_or_setting = sun_local_hour_angle + sun_right_ascension - (0.06571 * t) - 6.622
+  local_mean_time_of_rising_or_setting = sun_local_hour_angle + sun_right_ascension - (0.06571 * approximate_time) - 6.622
 
   #9. adjust back to UTC
 
@@ -88,3 +90,5 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising)
 
   return utc_mean_time_of_rising_or_setting + localOffset
 end
+
+puts rising_or_setting_time(17, 9, 2019, 39.9603, -83.0093, false)
