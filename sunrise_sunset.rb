@@ -1,5 +1,13 @@
 #1. first calculate the day of the year
 
+def radians(degrees)
+  return degrees * (Math::PI / 180)
+end
+
+def degrees(radians)
+  return radians * (180 / Math::PI)
+end
+
 def day_of_year(day, month, year)
   n1 = (275 * month / 9).floor
   n2 = ((month + 9) / 12).floor
@@ -8,7 +16,7 @@ def day_of_year(day, month, year)
   return n
 end
 
-def rising_or_setting_time(day, month, year, latitude, longitude, is_rising)
+def rising_or_setting_time(day, month, year, latitude, longitude, is_rising:)
 
   #2. convert the longitude to hour value and calculate an approximate time
 
@@ -25,14 +33,14 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising)
 
   #4. calculate the Sun's true longitude
 
-  sun_true_longitude = sun_mean_anomaly + (1.916 * Math.sin(sun_mean_anomaly)) + (0.020 * Math.sin(2 * sun_mean_anomaly)) + 282.634
+  sun_true_longitude = sun_mean_anomaly + (1.916 * degrees(Math.sin(radians(sun_mean_anomaly)))) + (0.020 * degrees(Math.sin(radians(2 * sun_mean_anomaly)))) + 282.634
 
   #NOTE: sun_true_longitude potentially needs to be adjusted into the range [0,360) by adding/subtracting 360
   sun_true_longitude = sun_true_longitude % 360
 
   #5a. calculate the Sun's right ascension
 
-  sun_right_ascension = Math.atan(0.91764 * Math.tan(sun_true_longitude))
+  sun_right_ascension = Math.atan(0.91764 * degrees(Math.tan(radians(sun_true_longitude))))
 
   #NOTE: sun_right_ascension potentially needs to be adjusted into the range [0,360) by adding/subtracting 360
   sun_right_ascension = sun_right_ascension % 360
@@ -49,13 +57,14 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising)
 
   #6. calculate the Sun's declination
 
-  sinDec = 0.39782 * Math.sin(sun_true_longitude)
-  cosDec = Math.cos(Math.asin(sinDec))
+  sinDec = 0.39782 * degrees(Math.sin(radians(sun_true_longitude)))
+  puts sinDec
+  cosDec = degrees(Math.cos(radians(Math.asin(sinDec))))
 
   #7a. calculate the Sun's local hour angle
 
   zenith = 90.8333 # "official" zenith
-  cosH = (Math.cos(zenith) - (sinDec * Math.sin(latitude))) / (cosDec * Math.cos(latitude))
+  cosH = (degrees(Math.cos(radians(zenith))) - (sinDec * degrees(Math.sin(radians(latitude))))) / (cosDec * degrees(Math.cos(radians(latitude))))
 
   if (cosH > 1) 
     # the sun never rises on this location (on the specified date)
@@ -88,7 +97,8 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising)
 
   #10. convert UT value to local time zone of latitude/longitude
 
+  localOffset = -5
   return utc_mean_time_of_rising_or_setting + localOffset
 end
 
-puts rising_or_setting_time(17, 9, 2019, 39.9603, -83.0093, false)
+puts rising_or_setting_time(17, 9, 2019, 39.9603, -83.0093, is_rising: false)
