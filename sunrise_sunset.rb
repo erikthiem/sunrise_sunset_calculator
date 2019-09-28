@@ -8,6 +8,18 @@ def degrees(radians)
   return radians * (180 / Math::PI)
 end
 
+def sin(d)
+  degrees(Math.sin(radians(d)))
+end
+
+def cos(d)
+  degrees(Math.cos(radians(d)))
+end
+
+def tan(d)
+  degrees(Math.tan(radians(d)))
+end
+
 def day_of_year(day, month, year)
   n1 = (275 * month / 9).floor
   n2 = ((month + 9) / 12).floor
@@ -33,14 +45,14 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising:)
 
   #4. calculate the Sun's true longitude
 
-  sun_true_longitude = sun_mean_anomaly + (1.916 * degrees(Math.sin(radians(sun_mean_anomaly)))) + (0.020 * degrees(Math.sin(radians(2 * sun_mean_anomaly)))) + 282.634
+  sun_true_longitude = sun_mean_anomaly + (1.916 * sin(sun_mean_anomaly)) + (0.020 * sin(2 * sun_mean_anomaly)) + 282.634
 
   #NOTE: sun_true_longitude potentially needs to be adjusted into the range [0,360) by adding/subtracting 360
   sun_true_longitude = sun_true_longitude % 360
 
   #5a. calculate the Sun's right ascension
 
-  sun_right_ascension = Math.atan(0.91764 * degrees(Math.tan(radians(sun_true_longitude))))
+  sun_right_ascension = Math.atan(0.91764 * tan(sun_true_longitude))
 
   #NOTE: sun_right_ascension potentially needs to be adjusted into the range [0,360) by adding/subtracting 360
   sun_right_ascension = sun_right_ascension % 360
@@ -57,14 +69,14 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising:)
 
   #6. calculate the Sun's declination
 
-  sinDec = 0.39782 * degrees(Math.sin(radians(sun_true_longitude)))
+  sinDec = 0.39782 * sin(sun_true_longitude)
   puts sinDec
-  cosDec = degrees(Math.cos(radians(Math.asin(sinDec))))
+  cosDec = cos(Math.asin(sinDec))
 
   #7a. calculate the Sun's local hour angle
 
   zenith = 90.8333 # "official" zenith
-  cosH = (degrees(Math.cos(radians(zenith))) - (sinDec * degrees(Math.sin(radians(latitude))))) / (cosDec * degrees(Math.cos(radians(latitude))))
+  cosH = (cos(zenith) - (sinDec * sin(latitude))) / (cosDec * cos(latitude))
 
   if (cosH > 1) 
     # the sun never rises on this location (on the specified date)
