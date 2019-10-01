@@ -114,5 +114,18 @@ def rising_or_setting_time(day, month, year, local_time_offset, latitude, longit
   return utc_mean_time_of_rising_or_setting + local_time_offset
 end
 
-puts "Rising time: #{rising_or_setting_time(28, 9, 2019, -5, 39.9603, -83.0093, is_rising: true)}"
-puts "Setting time: #{rising_or_setting_time(28, 9, 2019, -5, 39.9603, -83.0093, is_rising: false)}"
+puts "Columbus on Oct 1:"
+puts "Rising time: #{rising_or_setting_time(1, 10, 2019, -5, 39.9603, -83.0093, is_rising: true)}"
+puts "Setting time: #{rising_or_setting_time(1, 10, 2019, -5, 39.9603, -83.0093, is_rising: false)}"
+
+puts "\nBuenos Aires on Oct 1:"
+puts "Rising time: #{rising_or_setting_time(1, 10, 2019, -5, -34.57224388, -58.43931932, is_rising: true)}"
+puts "Setting time: #{rising_or_setting_time(1, 10, 2019, -5, -34.57224388, -58.43931932, is_rising: false)}"
+
+puts "\nColumbus on June 21:"
+puts "Rising time: #{rising_or_setting_time(21, 6, 2019, -5, 39.9603, -83.0093, is_rising: true)}"
+puts "Setting time: #{rising_or_setting_time(21, 6, 2019, -5, 39.9603, -83.0093, is_rising: false)}"
+
+puts "\nBuenos Aires on June 21:"
+puts "Rising time: #{rising_or_setting_time(21, 6, 2019, -5, -34.57224388, -58.43931932, is_rising: true)}"
+puts "Setting time: #{rising_or_setting_time(21, 6, 2019, -5, -34.57224388, -58.43931932, is_rising: false)}"
