@@ -9,15 +9,15 @@ def degrees(radians)
 end
 
 def sin(d)
-  degrees(Math.sin(radians(d)))
+  Math.sin(radians(d))
 end
 
 def cos(d)
-  degrees(Math.cos(radians(d)))
+  Math.cos(radians(d))
 end
 
 def tan(d)
-  degrees(Math.tan(radians(d)))
+  Math.tan(radians(d))
 end
 
 def day_of_year(day, month, year)
@@ -52,13 +52,13 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising:)
 
   #5a. calculate the Sun's right ascension
 
-  sun_right_ascension = Math.atan(0.91764 * tan(sun_true_longitude))
+  sun_right_ascension = degrees(Math.atan(0.91764 * tan(sun_true_longitude)))
 
   #NOTE: sun_right_ascension potentially needs to be adjusted into the range [0,360) by adding/subtracting 360
   sun_right_ascension = sun_right_ascension % 360
 
+  
   #5b. right ascension value needs to be in the same quadrant as L
-
   l_quadrant  = ((sun_true_longitude/90).floor) * 90
   ra_quadrant = ((sun_right_ascension/90).floor) * 90
   sun_right_ascension = sun_right_ascension + (l_quadrant - ra_quadrant)
@@ -67,11 +67,12 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising:)
 
   sun_right_ascension = sun_right_ascension / 15
 
+  # GOOD AS OF HERE
+
   #6. calculate the Sun's declination
 
   sinDec = 0.39782 * sin(sun_true_longitude)
-  puts sinDec
-  cosDec = cos(Math.asin(sinDec))
+  cosDec = cos(degrees(Math.asin(sinDec)))
 
   #7a. calculate the Sun's local hour angle
 
@@ -91,9 +92,9 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising:)
   #7b. finish calculating H and convert into hours
 
   if is_rising
-    sun_local_hour_angle = 360 - Math.acos(cosH)
+    sun_local_hour_angle = 360 - degrees(Math.acos(cosH))
   else
-    sun_local_hour_angle = Math.acos(cosH)
+    sun_local_hour_angle = degrees(Math.acos(cosH))
   end
 
   sun_local_hour_angle = sun_local_hour_angle / 15
@@ -113,4 +114,4 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising:)
   return utc_mean_time_of_rising_or_setting + localOffset
 end
 
-puts rising_or_setting_time(17, 9, 2019, 39.9603, -83.0093, is_rising: false)
+puts rising_or_setting_time(28, 9, 2019, 39.9603, -83.0093, is_rising: false)
