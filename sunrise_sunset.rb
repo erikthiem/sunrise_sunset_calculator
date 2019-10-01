@@ -28,7 +28,7 @@ def day_of_year(day, month, year)
   return n
 end
 
-def rising_or_setting_time(day, month, year, latitude, longitude, is_rising:)
+def rising_or_setting_time(day, month, year, local_time_offset, latitude, longitude, is_rising:)
 
   #2. convert the longitude to hour value and calculate an approximate time
 
@@ -107,11 +107,12 @@ def rising_or_setting_time(day, month, year, latitude, longitude, is_rising:)
 
   utc_mean_time_of_rising_or_setting = local_mean_time_of_rising_or_setting - lngHour
   #NOTE: UT potentially needs to be adjusted into the range [0,24) by adding/subtracting 24
+  utc_mean_time_of_rising_or_setting = utc_mean_time_of_rising_or_setting % 24
 
   #10. convert UT value to local time zone of latitude/longitude
 
-  localOffset = -5
-  return utc_mean_time_of_rising_or_setting + localOffset
+  return utc_mean_time_of_rising_or_setting + local_time_offset
 end
 
-puts rising_or_setting_time(28, 9, 2019, 39.9603, -83.0093, is_rising: false)
+puts "Rising time: #{rising_or_setting_time(28, 9, 2019, -5, 39.9603, -83.0093, is_rising: true)}"
+puts "Setting time: #{rising_or_setting_time(28, 9, 2019, -5, 39.9603, -83.0093, is_rising: false)}"
